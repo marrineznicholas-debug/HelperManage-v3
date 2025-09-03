@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Помощник в деле</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/animations.css">
+    <script type="module" src="scripts/firebase-config.js"></script>
+    <script type="module" src="scripts/main.js"></script>
+</head>
+<body>
+    <!-- Динамический фон -->
+    <div class="bg-grid"></div>
+    <div class="bg-animation">
+        <div class="bg-circle"></div>
+        <div class="bg-circle"></div>
+        <div class="bg-circle"></div>
+        <div class="bg-circle"></div>
+    </div>
+    
+    <header>
+        <h1>Помощник в деле</h1>
+        <p class="subtitle">Разбираем репорты с пристрастием и чувством юмора</p>
+    </header>
+    
+    <div class="container">
+        <section class="section input-section">
+            <h2>Загрузите данные репортов</h2>
+            <p class="humor">Просто вставьте текст, а мы сделаем всё остальное (ну почти всё)</p>
+            
+            <textarea id="inputData" placeholder="Вставьте сюда данные в формате:
+Администратор Andrew_Nixon ответил на репорт Jimmy_Disney: Вопрос:я прошел первые 3 заданий нового косм бп. как дальше проходить? опыт не капаетяс Ответ:Приветствую, опыт дают за каждый пейдей/участие в МП
+Администратор Andrew_Nixon ответил на репорт Matt_Murdok: Вопрос:как посмотреть есть ли на мне розыск? Ответ:Приветствую, в /stats
+... и так далее"></textarea>
+            
+            <div class="buttons">
+                <button id="parseBtn"><span>📊</span>Преобразовать в таблицу</button>
+                <button id="clearAllBtn" class="secondary"><span>🗑️</span>Удалить все таблицы</button>
+                <button id="copyErrorsBtn"><span>📋</span>Копировать таблицу ошибок</button>
+                <button id="statsBtn" class="secondary"><span>📈</span>Статистика</button>
+                <button id="keywordsBtn" class="secondary"><span>🔑</span>Ключевые слова</button>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2>Основная таблица репортов</h2>
+            <p class="humor">Здесь администраторы выглядят умными... пока мы не проверим</p>
+            
+            <div id="mainTableContainer">
+                <table id="mainTable">
+                    <thead>
+                        <tr>
+                            <th>Администратор</th>
+                            <th>Автор репорта</th>
+                            <th>Вопрос</th>
+                            <th>Ответ</th>
+                            <th>Примечание</th>
+                            <th>Действие</th>
+                        </tr>
+                    </thead>
+                    <tbody id="mainTableBody">
+                        <!-- Данные будут добавлены через JavaScript -->
+                    </tbody>
+                </table>
+                <div id="emptyMain" class="empty-message">Нет данных для отображения. Загрузите данные выше.</div>
+            </div>
+        </section>
+        
+        <section class="section errors-section">
+            <h2>Блок ошибок</h2>
+            <p class="humor">Здесь живут проблемные репорты. Не кормите их после полуночи!</p>
+            
+            <div id="errorsTableContainer">
+                <table id="errorsTable">
+                    <thead>
+                        <tr>
+                            <th>Репорт</th>
+                            <th>Примечание</th>
+                            <th>Действие</th>
+                        </tr>
+                    </thead>
+                    <tbody id="errorsTableBody">
+                        <!-- Данные будут добавлены через JavaScript -->
+                    </tbody>
+                </table>
+                <div id="emptyErrors" class="empty-message">Пока нет репортов с примечаниями. Добавьте примечания в основной таблице.</div>
+            </div>
+        </section>
+    </div>
+    
+    <!-- Модальные окна -->
+    <div class="overlay" id="statsOverlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Статистика</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="stat-item">
+                <span>📝 Добавлено примечаний:</span>
+                <span class="stat-value" id="modalNotesCount">0</span>
+            </div>
+            <div class="stat-item">
+                <span>❌ Удалено строк:</span>
+                <span class="stat-value" id="modalDeletedCount">0</span>
+            </div>
+            <div class="stat-item">
+                <span>⚠️ Репортов с ошибками:</span>
+                <span class="stat-value" id="modalErrorsCount">0</span>
+            </div>
+            <div class="stat-item">
+                <span>📊 Всего обработано:</span>
+                <span class="stat-value" id="modalTotalCount">0</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="overlay" id="keywordsOverlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Управление ключевыми словами</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <p class="humor">Добавьте слова для автоматического удаления строк</p>
+            
+            <div class="add-keyword">
+                <input type="text" id="newKeyword" placeholder="Введите ключевое слово">
+                <button id="addKeywordBtn">Добавить</button>
+            </div>
+            
+            <div class="keyword-list" id="keywordList">
+                <!-- Список ключевых слов будет здесь -->
+            </div>
+            
+            <div class="buttons" style="margin-top: 20px;">
+                <button id="deleteByKeywordsBtn" class="delete-btn">Удалить по ключевым словам</button>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>Помощник в деле &copy; Martinez | Сделано с ❤️ и щепоткой сарказма</p>
+    </footer>
+
+    <div id="toast" class="toast"></div>
+</body>
+</html>

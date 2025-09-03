@@ -1,0 +1,99 @@
+/* Динамический фон */
+.bg-animation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    opacity: 0.15;
+}
+
+.bg-circle {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+    opacity: 0.3;
+    animation: float 15s infinite ease-in-out;
+}
+
+.bg-circle:nth-child(1) {
+    width: 300px;
+    height: 300px;
+    top: 10%;
+    left: 10%;
+    animation-delay: 0s;
+}
+
+.bg-circle:nth-child(2) {
+    width: 200px;
+    height: 200px;
+    top: 60%;
+    left: 80%;
+    animation-delay: -5s;
+}
+
+.bg-circle:nth-child(3) {
+    width: 250px;
+    height: 250px;
+    top: 70%;
+    left: 15%;
+    animation-delay: -10s;
+}
+
+.bg-circle:nth-child(4) {
+    width: 180px;
+    height: 180px;
+    top: 20%;
+    left: 70%;
+    animation-delay: -7s;
+}
+
+.bg-grid {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+    background-image: 
+        linear-gradient(rgba(45, 45, 69, 0.2) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(45, 45, 69, 0.2) 1px, transparent 1px);
+    background-size: 30px 30px;
+    transform: perspective(500px) rotateX(60deg);
+    opacity: 0.2;
+}
+
+.moving {
+    animation: moveToErrors 0.7s ease forwards;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0) translateX(0) scale(1);
+    }
+    25% {
+        transform: translateY(-20px) translateX(15px) scale(1.05);
+    }
+    50% {
+        transform: translateY(10px) translateX(-15px) scale(0.95);
+    }
+    75% {
+        transform: translateY(-10px) translateX(-10px) scale(1.02);
+    }
+}
+
+@keyframes moveToErrors {
+    0% { 
+        transform: translateX(0) scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: translateX(100px) scale(0.95);
+        opacity: 0.7;
+    }
+    100% {
+        transform: translateX(1000px) scale(0.9);
+        opacity: 0;
+    }
+}
